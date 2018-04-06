@@ -5,7 +5,7 @@ namespace Breeze.PocoMetadata
 {
     class CommandLineOptions
     {
-        //WHAT
+        
         [Option('i', "input-file", HelpText = "The input assembly containing the object model", Required = true)]
         public string InputFile { get; set; }
 

@@ -2,18 +2,31 @@
 using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Breeze.PocoMetadata
 {
     class Program
     {
         static readonly CommandLineOptions Options = new CommandLineOptions();
-
+        //class person { public string name { get; set; } }
         static void Main(string[] args)
         {
+
+            //var persons = new[] {
+            //    new person { name = "personA" },
+            //    new person { name = "personAA"},
+            //    new person { name = "personB" }
+            //};
+
+            //var filteredPersons = 
+            //    persons
+            //        .Where(p => { var x = p.name.ToLower(); return x.EndsWith("a"); })
+            //        .Where(p => p.name.ToLower().Count(c => c == 'a') > 0);
+
             var procname = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
             Console.WriteLine(procname + ' ' + string.Join(" ", args));
-            //WHAT
+            
             var parser = new CommandLine.Parser(ps => { ps.MutuallyExclusive = true; ps.HelpWriter = Console.Out; });
 
             if (!parser.ParseArguments(args, Options))
@@ -31,7 +44,6 @@ namespace Breeze.PocoMetadata
 
             // TODO: how to get this from the command line?
             EntityDescriptor descriptor;
-            //WHAT
             if (assemblyName.Contains("Northwind"))
                 descriptor = new NorthwindEntityDescriptor();
             else

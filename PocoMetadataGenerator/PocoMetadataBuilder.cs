@@ -42,7 +42,6 @@ namespace Breeze.PocoMetadata
         {
             InitMap();
             _allTypes = types.ToList();
-            //WHAT
             _types = types.Select(t => _describer.Replace(t, types)).Distinct().Where(t => _describer.Include(t)).ToList();
             _entityTypes = _types.Where(t => !_describer.IsComplexType(t)).ToList();
             var navigations = new List<Dictionary<string, object>>();
@@ -100,17 +99,29 @@ namespace Breeze.PocoMetadata
         void AddType(Type type)
         {
             // "Customer:#Breeze.Models.NorthwindIBModel": {
-            var classKey = type.Name + ":#" + type.Namespace;
+            var typeKey = type.Name + ":#" + type.Namespace;
             var cmap = new Dictionary<string, object>();
-            //WHAT
+            
             _typeList.Add(cmap);
             _typeMap.Add(type, cmap);
-            
+
+            //var x = new[] { 1, 2, 3 };
+
+            //var s = new[] {
+            //new {
+            //    MyProp1 = 10,
+            //    MyProp2 = "strtrt"
+            //},
+            //new {
+            //    MyProp1 = 20,
+            //    MyProp2 = "strtrt"
+            //}
+            //};
+
             cmap.Add("shortName", type.Name);
             cmap.Add("namespace", type.Namespace);
             if (!type.IsInterface)
             {
-                //WHAT
                 var interfaces = type.GetInterfaces().Except(type.BaseType.GetInterfaces()).Where(t => _types.Contains(t)).Select(t => t.Name).ToList();
                 if (interfaces.Any())
                 {
@@ -145,7 +156,7 @@ namespace Breeze.PocoMetadata
 
                 var resourceName = _describer.GetResourceName(type);
                 cmap.Add("defaultResourceName", resourceName);
-                _resourceMap.Add(resourceName, classKey);
+                _resourceMap.Add(resourceName, typeKey);
             }
 
 
@@ -176,7 +187,7 @@ namespace Breeze.PocoMetadata
                 var missingFKHandling = _describer.GetMissingPKHandling(type);
                 if (missingFKHandling == MissingKeyHandling.Error)
                 {
-                    throw new Exception("Key not found for entity " + classKey);
+                    throw new Exception("Key not found for entity " + typeKey);
                 }
                 else if (missingFKHandling == MissingKeyHandling.Add)
                 {
@@ -189,7 +200,7 @@ namespace Breeze.PocoMetadata
                 }
                 else
                 {
-                    Console.Error.WriteLine("Key not found for entity " + classKey);
+                    Console.Error.WriteLine("Key not found for entity " + typeKey);
                 }
             }
 
